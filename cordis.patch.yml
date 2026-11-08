@@ -1,0 +1,6 @@
+# Adds the MCP inspector Host row: it serves the configured MCP servers to the
+# Web panel over a loopback JSON route. The Client half is declared by the
+# package's `dsh.client` section and renders into the sidebar seats.
+- insert:
+    - id: mcp-inspector
+      name: 'dsh-mcp-inspector'

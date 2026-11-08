@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "MCP servers",
+    "description": "Lists the configured MCP servers with their availability and lets you expand each server to read its methods and descriptions."
+  }
+}
