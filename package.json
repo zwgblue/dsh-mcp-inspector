@@ -5,13 +5,13 @@
   "type": "module",
   "license": "MIT",
   "author": "zhouwenguo",
-  "homepage": "https://github.com/YOUR-GITHUB-USERNAME/dsh-mcp-inspector#readme",
+  "homepage": "https://github.com/zwgblue/dsh-mcp-inspector#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/YOUR-GITHUB-USERNAME/dsh-mcp-inspector.git"
+    "url": "git+https://github.com/zwgblue/dsh-mcp-inspector.git"
   },
   "bugs": {
-    "url": "https://github.com/YOUR-GITHUB-USERNAME/dsh-mcp-inspector/issues"
+    "url": "https://github.com/zwgblue/dsh-mcp-inspector/issues"
   },
   "keywords": [
     "dsh",

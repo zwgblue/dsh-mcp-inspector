@@ -79,11 +79,11 @@
 └── icon.svg            # 插件图标
 ```
 
-## 发布前需要替换
+## 仓库元数据
 
-- `package.json` 里的 `YOUR-GITHUB-USERNAME`（`homepage` / `repository` / `bugs`）。
+- 包元数据已指向 `github.com/zwgblue/dsh-mcp-inspector`；如果你 fork 了本项目，请同步修改 `package.json` 里的三处地址（`homepage` / `repository` / `bugs`）。
 - 如需要 npm 发布：把包名改成你的作用域（例如 `@you/dsh-mcp-inspector`），同时修改 `cordis.patch.yml` 里的 `name` 和 `client.js` 顶部的模块 id。
-- `LICENSE` 中的版权人/年份（当前为 `2026 zhouwenguo`）。
+- `LICENSE` 中的版权人/年份可按需修改（当前为 `2026 zhouwenguo`）。
 
 ## License
 
