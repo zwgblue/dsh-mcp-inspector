@@ -4,6 +4,8 @@
 
 给 DeepSeek Harness Web UI 增加一个**MCP 服务器面板**：左侧栏入口 → 中间面板列出当前 profile 里已配置的 MCP 服务器，显示实时可用状态，展开可查看完整配置与全部方法，并可在行内直接启用/停用某台服务器。
 
+![DeepSeek Harness 侧边栏中的 MCP 服务器面板](docs/screenshot.png)
+
 ## 功能
 
 - **左侧栏入口**：`MCP 服务器` 图标，点击打开全局面板。
@@ -76,7 +78,8 @@
 ├── index.js            # Host 半：清单 + 开关路由
 ├── client.js           # Client 半：侧边栏入口 + 主面板 React 页面
 ├── locale/{en,zh}.json # 插件显示标题/描述
-└── icon.svg            # 插件图标
+├── icon.svg            # 插件图标
+└── docs/screenshot.png # README 使用的面板截图
 ```
 
 ## 仓库元数据

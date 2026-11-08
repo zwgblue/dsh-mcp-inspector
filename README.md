@@ -4,8 +4,7 @@ English | [中文](README.zh-CN.md)
 
 A sidebar panel for the DeepSeek Harness Web UI that lists the MCP servers configured in the current profile, shows their live status, expands into full configuration plus every method they expose, and lets you switch a server on or off without editing configuration files.
 
-<!-- TODO: add a screenshot (docs/screenshot.png) once the repository is published. -->
-
+![MCP servers panel in the DeepSeek Harness sidebar](docs/screenshot.png)
 ## Features
 
 - **Sidebar entry**: an `MCP servers` icon in the left sidebar opens the global panel.
@@ -78,7 +77,8 @@ Security notes:
 ├── index.js            # Host half: inventory + toggle routes
 ├── client.js           # Client half: sidebar entry + main panel (React)
 ├── locale/{en,zh}.json # plugin display title and description
-└── icon.svg            # plugin icon
+├── icon.svg            # plugin icon
+└── docs/screenshot.png # panel screenshot used by this README
 ```
 
 ## Repository metadata
