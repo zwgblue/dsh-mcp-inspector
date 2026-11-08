@@ -85,7 +85,7 @@ Security notes:
 
 - The package metadata points at `github.com/zwgblue/dsh-mcp-inspector`. If you fork the project, update the three URLs in `package.json` (`homepage`, `repository`, `bugs`).
 - To publish on npm, change the package name to your scope (for example `@you/dsh-mcp-inspector`) and update the same name in `cordis.patch.yml` and in the module id at the top of `client.js`.
-- Adjust the copyright holder/year in `LICENSE` (currently `2026 zhouwenguo`).
+- Adjust the copyright holder/year in `LICENSE` (currently `2026 zwgblue`).
 
 ## License
 
