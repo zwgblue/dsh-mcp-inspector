@@ -218,6 +218,40 @@ window.__ModuleLoader__.load({
 .mcpi-button:hover { background: var(--dsw-alias-bg-layer-2); }
 .mcpi-button:focus-visible { outline: 2px solid var(--dsw-alias-brand-primary); outline-offset: 1px; }
 .mcpi-button[disabled] { opacity: .55; cursor: default; }
+.mcpi-toolbar .mcpi-button {
+  min-width: 84px;
+  justify-content: center;
+}
+/* A refresh keeps its label and icon slot so the toolbar never reflows; the
+   busy state is a spinning glyph plus aria-busy, not a wider label. */
+.mcpi-refresh-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+}
+.mcpi-button[data-busy="true"] { cursor: progress; }
+.mcpi-button[data-busy="true"] .mcpi-refresh-icon { animation: mcpi-spin .9s linear infinite; }
+@keyframes mcpi-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mcpi-button[data-busy="true"] .mcpi-refresh-icon { animation: none; }
+}
+.mcpi-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
 .mcpi-stats {
   display: flex;
   flex-wrap: wrap;
@@ -687,8 +721,28 @@ body[data-ds-dark-theme] .mcpi-badge[data-tone="transport-http"] { color: var(--
       const [toggleMessage, setToggleMessage] = React.useState(null);
       const autoExpanded = React.useRef(false);
       const delayedRefresh = React.useRef(undefined);
+      const refreshBusySince = React.useRef(0);
+      const refreshEndTimer = React.useRef(undefined);
 
-      React.useEffect(() => () => clearTimeout(delayedRefresh.current), []);
+      React.useEffect(() => () => {
+        clearTimeout(delayedRefresh.current);
+        clearTimeout(refreshEndTimer.current);
+      }, []);
+
+      /**
+       * End the busy state, but keep the spinner up for at least 500 ms so a fast
+       * response reads as a refresh rather than a flicker. A polled load that
+       * finishes while no refresh is running ends it immediately (it is already off).
+       */
+      const endRefreshing = () => {
+        const remaining = 500 - (Date.now() - refreshBusySince.current);
+        clearTimeout(refreshEndTimer.current);
+        if (remaining > 0) {
+          refreshEndTimer.current = window.setTimeout(() => setRefreshing(false), remaining);
+          return;
+        }
+        setRefreshing(false);
+      };
 
       React.useEffect(() => {
         if (!locale || typeof locale.subscribe !== 'function') return undefined;
@@ -711,7 +765,7 @@ body[data-ds-dark-theme] .mcpi-badge[data-tone="transport-http"] { color: var(--
             const data = await response.json();
             if (!alive) return;
             setState({ phase: 'ready', data, error: null });
-            setRefreshing(false);
+            endRefreshing();
             if (!autoExpanded.current) {
               autoExpanded.current = true;
               const servers = data && Array.isArray(data.servers) ? data.servers : [];
@@ -722,7 +776,7 @@ body[data-ds-dark-theme] .mcpi-badge[data-tone="transport-http"] { color: var(--
           } catch (error) {
             if (!alive || controller.signal.aborted) return;
             setState({ phase: 'error', data: null, error: error instanceof Error ? error.message : String(error) });
-            setRefreshing(false);
+            endRefreshing();
           }
         };
         load();
@@ -740,6 +794,7 @@ body[data-ds-dark-theme] .mcpi-badge[data-tone="transport-http"] { color: var(--
       const allExpanded = servers.length > 0 && servers.every((server) => expanded[server.name] === true);
 
       const refresh = () => {
+        refreshBusySince.current = Date.now();
         setRefreshing(true);
         setRefreshKey((value) => value + 1);
       };
@@ -815,7 +870,27 @@ body[data-ds-dark-theme] .mcpi-badge[data-tone="transport-http"] { color: var(--
             className: 'mcpi-button',
             onClick: refresh,
             disabled: refreshing,
-          }, refreshing ? t('refreshing') : t('refresh'))));
+            'data-busy': refreshing ? 'true' : 'false',
+            'aria-busy': refreshing ? 'true' : 'false',
+            title: refreshing ? t('refreshing') : t('refresh'),
+          },
+            h('span', { className: 'mcpi-refresh-icon', 'aria-hidden': true },
+              h('svg', { width: 12, height: 12, viewBox: '0 0 12 12', fill: 'none', focusable: false },
+                h('path', {
+                  d: 'M9.6 6a3.6 3.6 0 1 1-1.05-2.55',
+                  stroke: 'currentColor',
+                  strokeWidth: 1.2,
+                  strokeLinecap: 'round',
+                }),
+                h('path', {
+                  d: 'M9.35 1.5v2.2h-2.2',
+                  stroke: 'currentColor',
+                  strokeWidth: 1.2,
+                  strokeLinecap: 'round',
+                  strokeLinejoin: 'round',
+                }))),
+            h('span', null, t('refresh')),
+            refreshing ? h('span', { className: 'mcpi-sr-only' }, t('refreshing')) : null)));
 
       let body;
       if (state.phase === 'error') {
