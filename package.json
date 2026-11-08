@@ -1,6 +1,6 @@
 {
   "name": "dsh-mcp-inspector",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Sidebar panel for the DeepSeek Harness Web UI: lists configured MCP servers with live status, expandable configuration and methods, and a per-server on/off switch.",
   "type": "module",
   "license": "MIT",
